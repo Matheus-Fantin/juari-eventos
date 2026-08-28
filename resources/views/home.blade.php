@@ -59,7 +59,7 @@
             <div>Fogão a Lenha</div>
             <div>Churrasqueira</div>
             <div>Cozinha de Apoio</div>
-            <div>Buffet</div>
+            <div>Banheiros</div>
         </div>
     </section>
 
@@ -184,53 +184,133 @@
         </p>
     </section>
 
-    {{-- FORMULÁRIO DE ORÇAMENTO --}}
+            {{-- FORMULÁRIO DE ORÇAMENTO --}}
     <section id="orcamento" class="grid grid-cols-1 md:grid-cols-2">
         <div class="hidden md:block bg-cover bg-center min-h-[420px]"
              style="background-image: url('{{ asset('images/fachada.jpg') }}');"></div>
 
         <div class="bg-graphite px-6 py-16 md:px-12 flex items-center">
             <div class="max-w-md w-full mx-auto">
-                <h2 class="font-display font-extrabold text-2xl md:text-3xl text-cream mb-3">
-                    Vamos planejar o seu evento juntos?
-                </h2>
-                <div class="w-14 h-0.5 bg-terracotta mb-4"></div>
-                <p class="text-cream/70 text-sm mb-8">
-                    Preencha o formulário abaixo para receber nosso contato.
-                </p>
 
-                <form method="POST" action="{{ url('/orcamento') }}" class="flex flex-col gap-4">
-                    @csrf
-                    <input type="text" name="nome" placeholder="Nome completo"
-                           class="rounded-md border border-cream/20 bg-graphite-light text-cream placeholder:text-cream/40 px-4 py-3 text-sm">
-                    <input type="text" name="telefone" placeholder="WhatsApp"
-                           class="rounded-md border border-cream/20 bg-graphite-light text-cream placeholder:text-cream/40 px-4 py-3 text-sm">
-                    <input type="email" name="email" placeholder="E-mail"
-                           class="rounded-md border border-cream/20 bg-graphite-light text-cream placeholder:text-cream/40 px-4 py-3 text-sm">
-                    <input type="date" name="data_evento"
-                           class="rounded-md border border-cream/20 bg-graphite-light text-cream placeholder:text-cream/40 px-4 py-3 text-sm">
-                    <input type="number" name="numero_convidados" placeholder="Nº de convidados" min="1"
-                           class="rounded-md border border-cream/20 bg-graphite-light text-cream placeholder:text-cream/40 px-4 py-3 text-sm">
-                    <select name="event_type_id"
-                            class="rounded-md border border-cream/20 bg-graphite-light text-cream px-4 py-3 text-sm">
-                        <option value="">Tipo de evento</option>
-                        <option value="casamentos">Casamentos</option>
-                        <option value="festas-infantis">Festas Infantis</option>
-                        <option value="15-anos">15 Anos</option>
-                        <option value="corporativo">Corporativo</option>
-                        <option value="aniversarios">Aniversários</option>
-                        <option value="cha-de-bebe">Chá de Bebê</option>
-                        <option value="formaturas">Formaturas</option>
-                        <option value="outros">Outros</option>
-                    </select>
-                    <textarea name="mensagem" placeholder="Detalhes adicionais (não obrigatório)" rows="3"
-                              class="rounded-md border border-cream/20 bg-graphite-light text-cream placeholder:text-cream/40 px-4 py-3 text-sm resize-none"></textarea>
+                @if (session('sucesso'))
+                    {{-- TELA DE CONFIRMAÇÃO --}}
+                    <div class="text-center">
+                        <div class="h-14 w-14 rounded-full bg-terracotta/20 flex items-center justify-center mx-auto mb-6">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-terracotta" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                <path d="M20 6L9 17l-5-5"></path>
+                            </svg>
+                        </div>
+                        <h2 class="font-display font-extrabold text-2xl md:text-3xl text-cream mb-3">
+                            Solicitação enviada!
+                        </h2>
+                        <p class="text-cream/70 text-sm mb-8">
+                            {{ session('sucesso') }}
+                        </p>
 
-                    <button type="submit"
-                            class="rounded-md bg-terracotta text-cream px-6 py-3 text-sm font-medium hover:bg-terracotta-dark transition mt-2">
-                        Enviar solicitação
-                    </button>
-                </form>
+                        @if (session('resumo'))
+                            <div class="rounded-md bg-graphite-light border border-cream/10 px-5 py-4 text-left text-sm text-cream/80 mb-8 space-y-1">
+                                <p><span class="text-cream/50">Nome:</span> {{ session('resumo')['nome'] }}</p>
+                                <p><span class="text-cream/50">Evento:</span> {{ session('resumo')['evento'] }}</p>
+                                @if (session('resumo')['data'])
+                                    <p><span class="text-cream/50">Data:</span> {{ \Carbon\Carbon::parse(session('resumo')['data'])->format('d/m/Y') }}</p>
+                                @endif
+                            </div>
+                        @endif
+
+                        <p class="text-cream/60 text-xs mb-4">
+                            Enquanto isso, adiante o seu atendimento falando direto com a nossa equipe:
+                        </p>
+                        <a href="https://wa.me/5543996497714" target="_blank" rel="noopener"
+                           class="inline-flex items-center justify-center gap-2 rounded-md bg-green-600 text-white px-6 py-3 text-sm font-medium hover:bg-green-700 transition w-full">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 32 32" fill="currentColor">
+                                <path d="M16.001 3C9.373 3 4 8.373 4 15c0 2.362.688 4.564 1.874 6.417L4 29l7.783-1.845A11.94 11.94 0 0 0 16.001 27C22.628 27 28 21.627 28 15S22.628 3 16.001 3Zm0 21.818a9.77 9.77 0 0 1-4.98-1.363l-.357-.212-4.62 1.095 1.127-4.505-.233-.37A9.78 9.78 0 0 1 5.182 15c0-5.964 4.854-10.818 10.819-10.818 5.963 0 10.817 4.854 10.817 10.818 0 5.964-4.854 10.818-10.817 10.818Zm5.928-8.106c-.325-.163-1.923-.949-2.222-1.058-.298-.109-.515-.163-.732.163-.217.326-.84 1.058-1.03 1.276-.19.217-.379.244-.704.081-.325-.163-1.372-.505-2.613-1.611-.966-.861-1.618-1.924-1.808-2.249-.19-.326-.02-.502.143-.664.147-.146.325-.38.488-.57.163-.19.217-.326.326-.543.109-.217.054-.407-.027-.57-.081-.163-.732-1.765-1.003-2.417-.264-.634-.532-.548-.732-.558-.19-.009-.407-.011-.624-.011-.217 0-.57.081-.868.407-.298.325-1.138 1.112-1.138 2.714 0 1.602 1.165 3.15 1.327 3.367.163.217 2.293 3.503 5.557 4.912.777.335 1.383.535 1.856.685.78.248 1.489.213 2.05.129.625-.093 1.923-.786 2.194-1.545.271-.759.271-1.41.19-1.545-.081-.135-.298-.217-.624-.38Z"></path>
+                            </svg>
+                            Conversar no WhatsApp agora
+                        </a>
+                    </div>
+                @else
+                    {{-- FORMULÁRIO --}}
+                    <h2 class="font-display font-extrabold text-2xl md:text-3xl text-cream mb-3">
+                        Vamos planejar o seu evento juntos?
+                    </h2>
+                    <div class="w-14 h-0.5 bg-terracotta mb-4"></div>
+                    <p class="text-cream/70 text-sm mb-8">
+                        Preencha o formulário abaixo para receber nosso contato.
+                    </p>
+
+                    <form method="POST" action="{{ url('/orcamento') }}" class="flex flex-col gap-4" novalidate>
+                        @csrf
+
+                        <div>
+                            <label class="block text-xs text-cream/50 mb-1.5">Nome completo <span class="text-terracotta">*</span></label>
+                            <input type="text" name="nome" required value="{{ old('nome') }}"
+                                   class="w-full rounded-md border @error('nome') border-red-400 @else border-cream/20 @enderror bg-graphite-light text-cream px-4 py-3 text-sm focus:outline-none focus:border-terracotta transition">
+                            @error('nome') <p class="text-red-300 text-xs mt-1.5">{{ $message }}</p> @enderror
+                        </div>
+
+                        <div>
+                            <label class="block text-xs text-cream/50 mb-1.5">WhatsApp <span class="text-terracotta">*</span></label>
+                            <input type="text" name="telefone" required value="{{ old('telefone') }}" placeholder="(43) 90000-0000"
+                                   class="w-full rounded-md border @error('telefone') border-red-400 @else border-cream/20 @enderror bg-graphite-light text-cream placeholder:text-cream/30 px-4 py-3 text-sm focus:outline-none focus:border-terracotta transition">
+                            @error('telefone') <p class="text-red-300 text-xs mt-1.5">{{ $message }}</p> @enderror
+                        </div>
+
+                        <div>
+                            <label class="block text-xs text-cream/50 mb-1.5">E-mail</label>
+                            <input type="email" name="email" value="{{ old('email') }}"
+                                   class="w-full rounded-md border @error('email') border-red-400 @else border-cream/20 @enderror bg-graphite-light text-cream px-4 py-3 text-sm focus:outline-none focus:border-terracotta transition">
+                            @error('email') <p class="text-red-300 text-xs mt-1.5">{{ $message }}</p> @enderror
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs text-cream/50 mb-1.5">Data do evento <span class="text-terracotta">*</span></label>
+                                <div class="relative">
+                                    <input type="date" name="data_evento" required value="{{ old('data_evento') }}"
+                                        min="{{ now()->addDays(3)->format('Y-m-d') }}"
+                                        max="{{ now()->addYears(5)->format('Y-m-d') }}"
+                                           class="w-full appearance-none rounded-md border @error('data_evento') border-red-400 @else border-cream/20 @enderror bg-graphite-light text-cream px-4 py-3 pr-10 text-sm focus:outline-none focus:border-terracotta transition [color-scheme:dark] [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:inset-0 [&::-webkit-calendar-picker-indicator]:h-full [&::-webkit-calendar-picker-indicator]:w-full [&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-calendar-picker-indicator]:cursor-pointer">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-terracotta" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <rect x="3" y="5" width="18" height="16" rx="2"></rect>
+                                        <path d="M16 3v4M8 3v4M3 10h18"></path>
+                                    </svg>
+                                </div>
+                                @error('data_evento') <p class="text-red-300 text-xs mt-1.5">{{ $message }}</p> @enderror
+                            </div>
+
+                            <div>
+                                <label class="block text-xs text-cream/50 mb-1.5">Convidados <span class="text-terracotta">*</span></label>
+                                <input type="number" name="numero_convidados" required min="20" max="200" placeholder="Ex: 80" value="{{ old('numero_convidados') }}"
+                                       class="w-full rounded-md border @error('numero_convidados') border-red-400 @else border-cream/20 @enderror bg-graphite-light text-cream placeholder:text-cream/30 px-4 py-3 text-sm focus:outline-none focus:border-terracotta transition">
+                                @error('numero_convidados') <p class="text-red-300 text-xs mt-1.5">{{ $message }}</p> @enderror
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs text-cream/50 mb-1.5">Tipo de evento <span class="text-terracotta">*</span></label>
+                            <select name="event_type_id" required
+                                    class="w-full rounded-md border @error('event_type_id') border-red-400 @else border-cream/20 @enderror bg-graphite-light text-cream px-4 py-3 text-sm focus:outline-none focus:border-terracotta transition">
+                                <option value="">Selecione uma opção</option>
+                                @foreach (\App\Models\EventType::orderBy('nome')->get() as $tipo)
+                                    <option value="{{ $tipo->id }}" @selected(old('event_type_id') == $tipo->id)>{{ $tipo->nome }}</option>
+                                @endforeach
+                            </select>
+                            @error('event_type_id') <p class="text-red-300 text-xs mt-1.5">{{ $message }}</p> @enderror
+                        </div>
+
+                        <div>
+                            <label class="block text-xs text-cream/50 mb-1.5">Detalhes adicionais</label>
+                            <textarea name="mensagem" rows="3" placeholder="Não obrigatório"
+                                      class="w-full rounded-md border border-cream/20 bg-graphite-light text-cream placeholder:text-cream/30 px-4 py-3 text-sm resize-none focus:outline-none focus:border-terracotta transition">{{ old('mensagem') }}</textarea>
+                        </div>
+
+                        <button type="submit"
+                                class="rounded-md bg-terracotta text-cream px-6 py-3 text-sm font-medium hover:bg-terracotta-dark transition mt-2">
+                            Enviar solicitação
+                        </button>
+                    </form>
+                @endif
+
             </div>
         </div>
     </section>
@@ -272,5 +352,13 @@
             @endforeach
         </div>
     </section>
+
+    @if (session('sucesso') || $errors->any())
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                document.getElementById('orcamento').scrollIntoView({ behavior: 'instant', block: 'start' });
+            });
+        </script>
+    @endif
 
 @endsection

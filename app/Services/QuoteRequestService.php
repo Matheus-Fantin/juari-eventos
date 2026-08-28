@@ -11,12 +11,13 @@ class QuoteRequestService
     public function handle(array $data): QuoteRequest
     {
         $lead = Lead::create([
-            'nome' => $data['nome'],
-            'telefone' => $data['telefone'],
-            'email' => $data['email'] ?? null,
-            'data_evento' => $data['data_evento'] ?? null,
-            'event_type_id' => $data['event_type_id'],
-            'status' => 'novo',
+        'nome' => $data['nome'],
+        'telefone' => $data['telefone'],
+        'email' => $data['email'] ?? null,
+        'data_evento' => $data['data_evento'] ?? null,
+        'numero_convidados' => $data['numero_convidados'] ?? null,
+        'event_type_id' => $data['event_type_id'],
+        'status' => 'novo',
         ]);
 
         $quoteRequest = QuoteRequest::create([
