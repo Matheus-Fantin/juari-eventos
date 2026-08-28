@@ -24,8 +24,8 @@
                 <li>
                     <a href="{{ url('/') }}" class="flex items-center gap-1.5 hover:text-cream transition">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M3 11l9-8 9 8"/>
-                            <path d="M5 10v10h14V10"/>
+                            <path d="M3 11l9-8 9 8"></path>
+                            <path d="M5 10v10h14V10"></path>
                         </svg>
                         Início
                     </a>
@@ -42,22 +42,23 @@
                 Orçamento
             </a>
 
-            {{-- Botão hambúrguer (só aparece no mobile) --}}
             <button id="menu-toggle" type="button"
-                    class="md:hidden relative z-40 text-cream p-2 -mr-2"
+                    class="md:hidden relative z-40 h-9 w-9 flex items-center justify-center text-cream"
                     aria-label="Abrir menu">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M4 6h16M4 12h16M4 18h16"/>
+                <svg id="icon-menu" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+                <svg id="icon-close" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M6 6l12 12M18 6L6 18"></path>
                 </svg>
             </button>
         </nav>
 
-        {{-- Painel do menu mobile --}}
         <div id="menu-mobile" class="hidden md:hidden bg-graphite px-6 pb-6">
             <ul class="flex flex-col gap-4 text-sm text-cream/90 pt-2">
                 <li><a href="{{ url('/') }}" class="flex items-center gap-2">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/>
+                            <path d="M3 11l9-8 9 8"></path><path d="M5 10v10h14V10"></path>
                         </svg>
                         Início
                 </a></li>
@@ -89,7 +90,7 @@
                 <a href="https://wa.me/5543996497714" target="_blank" rel="noopener"
                    class="flex items-center gap-2 hover:text-cream transition w-fit">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 2a10 10 0 0 0-8.6 15l-1.2 4.4 4.5-1.2A10 10 0 1 0 12 2Zm0 18a8 8 0 0 1-4.1-1.1l-.3-.2-2.7.7.7-2.6-.2-.3A8 8 0 1 1 12 20Zm4.4-5.5c-.2-.1-1.4-.7-1.6-.8-.2-.1-.4-.1-.5.1-.2.2-.6.8-.7.9-.1.2-.3.2-.5.1-.2-.1-1-.4-2-1.2-.7-.6-1.2-1.4-1.4-1.6-.1-.2 0-.4.1-.5l.4-.4c.1-.1.2-.2.2-.4.1-.1 0-.3 0-.4-.1-.1-.5-1.2-.7-1.7-.2-.4-.4-.4-.5-.4h-.5c-.1 0-.4.1-.6.3-.2.2-.8.8-.8 1.9s.8 2.2 1 2.4c.1.1 1.6 2.5 3.9 3.5.5.2.9.4 1.3.5.5.2 1 .1 1.3-.1.4-.2 1.4-.6 1.6-1.1.2-.6.2-1 .1-1.1-.1-.1-.2-.2-.4-.2Z"/>
+                        <path d="M12 2a10 10 0 0 0-8.6 15l-1.2 4.4 4.5-1.2A10 10 0 1 0 12 2Zm0 18a8 8 0 0 1-4.1-1.1l-.3-.2-2.7.7.7-2.6-.2-.3A8 8 0 1 1 12 20Zm4.4-5.5c-.2-.1-1.4-.7-1.6-.8-.2-.1-.4-.1-.5.1-.2.2-.6.8-.7.9-.1.2-.3.2-.5.1-.2-.1-1-.4-2-1.2-.7-.6-1.2-1.4-1.4-1.6-.1-.2 0-.4.1-.5l.4-.4c.1-.1.2-.2.2-.4.1-.1 0-.3 0-.4-.1-.1-.5-1.2-.7-1.7-.2-.4-.4-.4-.5-.4h-.5c-.1 0-.4.1-.6.3-.2.2-.8.8-.8 1.9s.8 2.2 1 2.4c.1.1 1.6 2.5 3.9 3.5.5.2.9.4 1.3.5.5.2 1 .1 1.3-.1.4-.2 1.4-.6 1.6-1.1.2-.6.2-1 .1-1.1-.1-.1-.2-.2-.4-.2Z"></path>
                     </svg>
                     (43) 99649-7714
                 </a>
@@ -97,9 +98,9 @@
                 <a href="https://www.instagram.com/juarieventos" target="_blank" rel="noopener"
                    class="flex items-center gap-2 hover:text-cream transition w-fit">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                        <rect x="3" y="3" width="18" height="18" rx="5"/>
-                        <circle cx="12" cy="12" r="4"/>
-                        <circle cx="17.5" cy="6.5" r="1"/>
+                        <rect x="3" y="3" width="18" height="18" rx="5"></rect>
+                        <circle cx="12" cy="12" r="4"></circle>
+                        <circle cx="17.5" cy="6.5" r="1"></circle>
                     </svg>
                     @juarieventos
                 </a>
@@ -120,31 +121,35 @@
 
     <a href="https://wa.me/5543996497714" target="_blank" rel="noopener"
        class="fixed bottom-6 right-6 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-green-600 text-white shadow-lg hover:bg-green-700 hover:scale-105 transition">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 2a10 10 0 0 0-8.6 15l-1.2 4.4 4.5-1.2A10 10 0 1 0 12 2Zm0 18a8 8 0 0 1-4.1-1.1l-.3-.2-2.7.7.7-2.6-.2-.3A8 8 0 1 1 12 20Zm4.4-5.5c-.2-.1-1.4-.7-1.6-.8-.2-.1-.4-.1-.5.1-.2.2-.6.8-.7.9-.1.2-.3.2-.5.1-.2-.1-1-.4-2-1.2-.7-.6-1.2-1.4-1.4-1.6-.1-.2 0-.4.1-.5l.4-.4c.1-.1.2-.2.2-.4.1-.1 0-.3 0-.4-.1-.1-.5-1.2-.7-1.7-.2-.4-.4-.4-.5-.4h-.5c-.1 0-.4.1-.6.3-.2.2-.8.8-.8 1.9s.8 2.2 1 2.4c.1.1 1.6 2.5 3.9 3.5.5.2.9.4 1.3.5.5.2 1 .1 1.3-.1.4-.2 1.4-.6 1.6-1.1.2-.6.2-1 .1-1.1-.1-.1-.2-.2-.4-.2Z"/>
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" viewBox="0 0 32 32" fill="currentColor">
+            <path d="M16.001 3C9.373 3 4 8.373 4 15c0 2.362.688 4.564 1.874 6.417L4 29l7.783-1.845A11.94 11.94 0 0 0 16.001 27C22.628 27 28 21.627 28 15S22.628 3 16.001 3Zm0 21.818a9.77 9.77 0 0 1-4.98-1.363l-.357-.212-4.62 1.095 1.127-4.505-.233-.37A9.78 9.78 0 0 1 5.182 15c0-5.964 4.854-10.818 10.819-10.818 5.963 0 10.817 4.854 10.817 10.818 0 5.964-4.854 10.818-10.817 10.818Zm5.928-8.106c-.325-.163-1.923-.949-2.222-1.058-.298-.109-.515-.163-.732.163-.217.326-.84 1.058-1.03 1.276-.19.217-.379.244-.704.081-.325-.163-1.372-.505-2.613-1.611-.966-.861-1.618-1.924-1.808-2.249-.19-.326-.02-.502.143-.664.147-.146.325-.38.488-.57.163-.19.217-.326.326-.543.109-.217.054-.407-.027-.57-.081-.163-.732-1.765-1.003-2.417-.264-.634-.532-.548-.732-.558-.19-.009-.407-.011-.624-.011-.217 0-.57.081-.868.407-.298.325-1.138 1.112-1.138 2.714 0 1.602 1.165 3.15 1.327 3.367.163.217 2.293 3.503 5.557 4.912.777.335 1.383.535 1.856.685.78.248 1.489.213 2.05.129.625-.093 1.923-.786 2.194-1.545.271-.759.271-1.41.19-1.545-.081-.135-.298-.217-.624-.38Z"></path>
         </svg>
     </a>
 
-    {{-- Botão "voltar ao topo" (aparece só ao rolar a página) --}}
     <button id="back-to-top" type="button" aria-label="Voltar ao topo"
             class="hidden fixed bottom-24 right-6 z-40 h-11 w-11 items-center justify-center rounded-full bg-graphite text-cream shadow-lg hover:bg-graphite-light transition">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M12 19V5M5 12l7-7 7 7"/>
+            <path d="M12 19V5M5 12l7-7 7 7"></path>
         </svg>
     </button>
 
     <script>
-        // Menu mobile
-        const menuToggle = document.getElementById('menu-toggle');
-        const menuMobile = document.getElementById('menu-mobile');
+        var menuToggle = document.getElementById('menu-toggle');
+        var menuMobile = document.getElementById('menu-mobile');
+        var iconMenu = document.getElementById('icon-menu');
+        var iconClose = document.getElementById('icon-close');
+
         if (menuToggle && menuMobile) {
-            menuToggle.addEventListener('click', () => menuMobile.classList.toggle('hidden'));
+            menuToggle.addEventListener('click', function () {
+                menuMobile.classList.toggle('hidden');
+                iconMenu.classList.toggle('hidden');
+                iconClose.classList.toggle('hidden');
+            });
         }
 
-        // Botão voltar ao topo
-        const backToTop = document.getElementById('back-to-top');
+        var backToTop = document.getElementById('back-to-top');
         if (backToTop) {
-            window.addEventListener('scroll', () => {
+            window.addEventListener('scroll', function () {
                 if (window.scrollY > 500) {
                     backToTop.classList.remove('hidden');
                     backToTop.classList.add('flex');
@@ -153,7 +158,9 @@
                     backToTop.classList.remove('flex');
                 }
             });
-            backToTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+            backToTop.addEventListener('click', function () {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
         }
     </script>
 
