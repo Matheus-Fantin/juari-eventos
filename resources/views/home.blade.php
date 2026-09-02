@@ -5,9 +5,18 @@
 @section('content')
 
     {{-- HERO --}}
-    <section class="relative h-[65vh] min-h-[460px] bg-cover bg-center flex items-end"
-             style="background-image: url('{{ asset('images/fachada.jpg') }}');">
+    @php
+        $capaHome = 'images/home/home-1.jpg';
+        $existeCapaHome = file_exists(public_path($capaHome));
+    @endphp
+    <section class="relative h-[65vh] min-h-[460px] bg-cover bg-center flex items-end {{ $existeCapaHome ? '' : 'bg-graphite-light animate-pulse' }}"
+             @if($existeCapaHome) style="background-image: url('{{ asset($capaHome) }}');" @endif>
         <div class="absolute inset-0 bg-gradient-to-t from-graphite/90 via-graphite/30 to-transparent"></div>
+        @unless($existeCapaHome)
+            <div class="absolute inset-0 flex items-center justify-center text-graphite/40 text-xs">
+                {{ $capaHome }}
+            </div>
+        @endunless
         <div class="relative max-w-6xl mx-auto px-6 pb-12 text-center w-full">
             <p class="font-display font-semibold text-sm tracking-[3px] text-terracotta mb-3">SERTANÓPOLIS · PR</p>
             <h1 class="font-display font-extrabold text-4xl md:text-5xl text-cream mb-3">
@@ -141,8 +150,17 @@
             <a href="{{ url('/galeria') }}" class="text-sm text-terracotta hover:text-terracotta-dark transition">Ver todas as fotos →</a>
         </div>
         <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-            @for ($i = 0; $i < 8; $i++)
-                <div class="aspect-square rounded-md bg-graphite-light/10 animate-pulse"></div>
+            @for ($i = 1; $i <= 8; $i++)
+                @php
+                    $img = 'images/galeria/galeria-' . $i . '.jpg';
+                    $existe = file_exists(public_path($img));
+                @endphp
+                <div class="aspect-square rounded-md overflow-hidden {{ $existe ? 'bg-cover bg-center' : 'bg-graphite-light/10 animate-pulse flex items-center justify-center text-xs text-graphite/40' }}"
+                     @if($existe) style="background-image: url('{{ asset($img) }}');" @endif>
+                    @unless($existe)
+                        <div class="w-full h-full flex items-center justify-center">Em breve</div>
+                    @endunless
+                </div>
             @endfor
         </div>
     </section>
@@ -184,10 +202,10 @@
         </p>
     </section>
 
-            {{-- FORMULÁRIO DE ORÇAMENTO --}}
+    {{-- FORMULÁRIO DE ORÇAMENTO --}}
     <section id="orcamento" class="grid grid-cols-1 md:grid-cols-2">
         <div class="hidden md:block bg-cover bg-center min-h-[420px]"
-             style="background-image: url('{{ asset('images/fachada.jpg') }}');"></div>
+             style="background-image: url('{{ asset($existeCapaHome ? $capaHome : 'images/fachada.jpg') }}');"></div>
 
         <div class="bg-graphite px-6 py-16 md:px-12 flex items-center">
             <div class="max-w-md w-full mx-auto">
@@ -238,7 +256,7 @@
                         Preencha o formulário abaixo para receber nosso contato.
                     </p>
 
-                    <form method="POST" action="{{ url('/orcamento') }}" class="flex flex-col gap-4" novalidate>
+                    <form method="POST" action="{{ url('/orcamento') }}" class="flex flex-col gap-4">
                         @csrf
 
                         <div>
@@ -266,10 +284,9 @@
                             <div>
                                 <label class="block text-xs text-cream/50 mb-1.5">Data do evento <span class="text-terracotta">*</span></label>
                                 <div class="relative">
-                                    <input type="date" name="data_evento" required value="{{ old('data_evento') }}"
-                                        min="{{ now()->addDays(3)->format('Y-m-d') }}"
-                                        max="{{ now()->addYears(5)->format('Y-m-d') }}"
-                                           class="w-full appearance-none rounded-md border @error('data_evento') border-red-400 @else border-cream/20 @enderror bg-graphite-light text-cream px-4 py-3 pr-10 text-sm focus:outline-none focus:border-terracotta transition [color-scheme:dark] [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:inset-0 [&::-webkit-calendar-picker-indicator]:h-full [&::-webkit-calendar-picker-indicator]:w-full [&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-calendar-picker-indicator]:cursor-pointer">
+                                    <input type="text" id="data_evento" name="data_evento" required readonly
+                                           value="{{ old('data_evento') }}" placeholder="Selecione a data"
+                                           class="w-full rounded-md border @error('data_evento') border-red-400 @else border-cream/20 @enderror bg-graphite-light text-cream placeholder:text-cream/30 px-4 py-3 pr-10 text-sm focus:outline-none focus:border-terracotta transition cursor-pointer">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-terracotta" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                         <rect x="3" y="5" width="18" height="16" rx="2"></rect>
                                         <path d="M16 3v4M8 3v4M3 10h18"></path>
@@ -353,12 +370,24 @@
         </div>
     </section>
 
-    @if (session('sucesso') || $errors->any())
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            @if (session('sucesso') || $errors->any())
                 document.getElementById('orcamento').scrollIntoView({ behavior: 'instant', block: 'start' });
-            });
-        </script>
-    @endif
+            @endif
+
+            if (window.flatpickr) {
+                flatpickr("#data_evento", {
+                    locale: "pt",
+                    dateFormat: "Y-m-d",
+                    altInput: true,
+                    altFormat: "d/m/Y",
+                    minDate: new Date().fp_incr(3),
+                    maxDate: new Date().fp_incr(5 * 365),
+                    disableMobile: true,
+                });
+            }
+        });
+    </script>
 
 @endsection
