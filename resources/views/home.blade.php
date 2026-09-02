@@ -148,40 +148,145 @@
     </section>
 
     {{-- DEPOIMENTOS --}}
-    <section class="max-w-6xl mx-auto px-6 py-16 border-t border-graphite/10">
+    <section id="depoimentos" class="max-w-6xl mx-auto px-6 py-16 border-t border-graphite/10">
         <h2 class="font-display font-semibold text-sm tracking-[3px] text-terracotta uppercase mb-8">Depoimentos</h2>
+
+        @php
+            $depoimentosReais = \App\Models\Testimonial::where('publicado', true)->latest()->take(6)->get();
+            $usandoFicticios = $depoimentosReais->isEmpty();
+            $depoimentos = $usandoFicticios
+                ? collect([
+                    (object) ['autor' => 'Nome do Cliente', 'evento_tipo' => 'Casamento', 'texto' => 'Depoimento do cliente sobre o evento realizado no espaço.', 'nota' => 5],
+                    (object) ['autor' => 'Nome do Cliente', 'evento_tipo' => '15 Anos', 'texto' => 'Depoimento do cliente sobre o evento realizado no espaço.', 'nota' => 5],
+                ])
+                : $depoimentosReais;
+        @endphp
+
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-            @php
-                $depoimentos = [
-                    ['nome' => 'Nome do Cliente', 'evento' => 'Casamento', 'texto' => 'Depoimento do cliente sobre o evento realizado no espaço.'],
-                    ['nome' => 'Nome do Cliente', 'evento' => '15 Anos', 'texto' => 'Depoimento do cliente sobre o evento realizado no espaço.'],
-                ];
-            @endphp
             @foreach ($depoimentos as $d)
                 <div class="rounded-lg bg-white shadow-sm border border-graphite/5 p-6">
                     <div class="flex text-terracotta mb-3">
-                        @for ($s = 0; $s < 5; $s++)
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
+                        @for ($s = 1; $s <= 5; $s++)
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 {{ $s > $d->nota ? 'text-graphite/15' : '' }}" viewBox="0 0 24 24" fill="currentColor">
                                 <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2Z"></path>
                             </svg>
                         @endfor
                     </div>
-                    <p class="text-sm text-graphite/70 mb-4">&ldquo;{{ $d['texto'] }}&rdquo;</p>
+                    <p class="text-sm text-graphite/70 mb-4">&ldquo;{{ $d->texto }}&rdquo;</p>
                     <div class="flex items-center gap-3">
                         <div class="h-9 w-9 rounded-full bg-terracotta/15 text-terracotta font-display font-bold text-xs flex items-center justify-center">
-                            {{ strtoupper(substr($d['nome'], 0, 1)) }}
+                            {{ strtoupper(substr($d->autor, 0, 1)) }}
                         </div>
                         <div>
-                            <p class="text-sm font-medium text-graphite">{{ $d['nome'] }}</p>
-                            <p class="text-xs text-graphite/50">{{ $d['evento'] }}</p>
+                            <p class="text-sm font-medium text-graphite">{{ $d->autor }}</p>
+                            <p class="text-xs text-graphite/50">{{ $d->evento_tipo }}</p>
                         </div>
                     </div>
                 </div>
             @endforeach
         </div>
-        <p class="text-xs text-graphite/40 text-center">
-            Depoimentos fictícios utilizados para demonstração — serão substituídos por avaliações reais antes da publicação.
-        </p>
+
+        @if ($usandoFicticios)
+            <p class="text-xs text-graphite/40 text-center mb-8">
+                Depoimentos fictícios utilizados para demonstração — serão substituídos por avaliações reais assim que forem aprovados.
+            </p>
+        @endif
+
+        <div class="max-w-xl mx-auto">
+            @if (session('depoimento_sucesso'))
+                <div class="rounded-lg bg-terracotta/10 border border-terracotta/20 p-6 text-center">
+                    <p class="text-sm text-graphite">{{ session('depoimento_sucesso') }}</p>
+                </div>
+            @else
+                <details class="group rounded-lg border border-graphite/10 bg-white" @if($errors->any() && old('_form') === 'depoimento') open @endif>
+                    <summary class="cursor-pointer list-none flex items-center justify-between px-6 py-4 text-sm font-medium text-graphite">
+                        Já viveu um evento com a gente? Deixe seu depoimento
+                        <span class="text-terracotta text-lg leading-none transition group-open:rotate-45">+</span>
+                    </summary>
+                    <form method="POST" action="{{ url('/depoimentos') }}" class="flex flex-col gap-4 px-6 pb-6" novalidate>
+                        @csrf
+                        <input type="hidden" name="_form" value="depoimento">
+
+                        <div>
+                            <label class="block text-xs text-graphite/50 mb-1.5">Seu nome <span class="text-terracotta">*</span></label>
+                            <input type="text" name="autor" required value="{{ old('_form') === 'depoimento' ? old('autor') : '' }}"
+                                   class="w-full rounded-md border @error('autor') border-red-400 @else border-graphite/15 @enderror bg-white text-graphite px-4 py-3 text-sm focus:outline-none focus:border-terracotta transition">
+                            @error('autor') <p class="text-red-500 text-xs mt-1.5">{{ $message }}</p> @enderror
+                        </div>
+
+                        <div>
+                            <label class="block text-xs text-graphite/50 mb-1.5">Tipo de evento <span class="text-terracotta">*</span></label>
+                            <select name="evento_tipo" required
+                                    class="w-full rounded-md border @error('evento_tipo') border-red-400 @else border-graphite/15 @enderror bg-white text-graphite px-4 py-3 text-sm focus:outline-none focus:border-terracotta transition">
+                                <option value="">Selecione uma opção</option>
+                                @foreach (\App\Models\EventType::orderBy('nome')->get() as $tipo)
+                                    <option value="{{ $tipo->nome }}" @selected(old('evento_tipo') == $tipo->nome)>{{ $tipo->nome }}</option>
+                                @endforeach
+                            </select>
+                            @error('evento_tipo') <p class="text-red-500 text-xs mt-1.5">{{ $message }}</p> @enderror
+                        </div>
+
+                        <div>
+                            <label class="block text-xs text-graphite/50 mb-1.5">Sua avaliação <span class="text-terracotta">*</span></label>
+                            <div class="flex gap-1" id="depoimentoEstrelas" data-inicial="{{ old('nota', 0) }}">
+                                @for ($s = 1; $s <= 5; $s++)
+                                    <button type="button" data-valor="{{ $s }}" aria-label="{{ $s }} estrela(s)"
+                                            class="depoimento-estrela text-graphite/20 hover:scale-110 transition">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 pointer-events-none" viewBox="0 0 24 24" fill="currentColor">
+                                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2Z"></path>
+                                        </svg>
+                                    </button>
+                                @endfor
+                            </div>
+                            <input type="hidden" name="nota" id="depoimentoNota" value="{{ old('nota') }}">
+                            @error('nota') <p class="text-red-500 text-xs mt-1.5">{{ $message }}</p> @enderror
+                        </div>
+
+                        <div>
+                            <label class="block text-xs text-graphite/50 mb-1.5">Seu depoimento <span class="text-terracotta">*</span></label>
+                            <textarea name="texto" rows="3" required placeholder="Como foi a sua experiência com a Juari Eventos?"
+                                      class="w-full rounded-md border @error('texto') border-red-400 @else border-graphite/15 @enderror bg-white text-graphite placeholder:text-graphite/30 px-4 py-3 text-sm resize-none focus:outline-none focus:border-terracotta transition">{{ old('_form') === 'depoimento' ? old('texto') : '' }}</textarea>
+                            @error('texto') <p class="text-red-500 text-xs mt-1.5">{{ $message }}</p> @enderror
+                        </div>
+
+                        <p class="text-xs text-graphite/40">Seu depoimento passa por uma revisão rápida antes de aparecer na página.</p>
+
+                        <button type="submit"
+                                class="rounded-md bg-terracotta text-cream px-6 py-3 text-sm font-medium hover:bg-terracotta-dark transition">
+                            Enviar depoimento
+                        </button>
+                    </form>
+                </details>
+
+                <script>
+                    (function () {
+                        const wrap = document.getElementById('depoimentoEstrelas');
+                        if (!wrap) return;
+                        const botoes = Array.from(wrap.querySelectorAll('.depoimento-estrela'));
+                        const input = document.getElementById('depoimentoNota');
+                        const inicial = Number(wrap.dataset.inicial) || 0;
+
+                        function pintar(valor) {
+                            botoes.forEach(botao => {
+                                const ativo = Number(botao.dataset.valor) <= valor;
+                                botao.classList.toggle('text-terracotta', ativo);
+                                botao.classList.toggle('text-graphite/20', !ativo);
+                            });
+                        }
+
+                        botoes.forEach(botao => {
+                            botao.addEventListener('click', () => {
+                                const valor = Number(botao.dataset.valor);
+                                input.value = valor;
+                                pintar(valor);
+                            });
+                        });
+
+                        if (inicial > 0) pintar(inicial);
+                    })();
+                </script>
+            @endif
+        </div>
     </section>
 
             {{-- FORMULÁRIO DE ORÇAMENTO --}}
@@ -280,7 +385,7 @@
 
                             <div>
                                 <label class="block text-xs text-cream/50 mb-1.5">Convidados <span class="text-terracotta">*</span></label>
-                                <input type="number" name="numero_convidados" required min="20" max="200" placeholder="Ex: 80" value="{{ old('numero_convidados') }}"
+                                <input type="number" name="numero_convidados" required min="40" max="200" placeholder="Ex: 80" value="{{ old('numero_convidados') }}"
                                        class="w-full rounded-md border @error('numero_convidados') border-red-400 @else border-cream/20 @enderror bg-graphite-light text-cream placeholder:text-cream/30 px-4 py-3 text-sm focus:outline-none focus:border-terracotta transition">
                                 @error('numero_convidados') <p class="text-red-300 text-xs mt-1.5">{{ $message }}</p> @enderror
                             </div>
@@ -353,10 +458,16 @@
         </div>
     </section>
 
-    @if (session('sucesso') || $errors->any())
+    @if (session('sucesso') || (old('_form') !== 'depoimento' && $errors->any()))
         <script>
             document.addEventListener('DOMContentLoaded', function () {
                 document.getElementById('orcamento').scrollIntoView({ behavior: 'instant', block: 'start' });
+            });
+        </script>
+    @elseif (session('depoimento_sucesso') || (old('_form') === 'depoimento' && $errors->any()))
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                document.getElementById('depoimentos').scrollIntoView({ behavior: 'instant', block: 'start' });
             });
         </script>
     @endif

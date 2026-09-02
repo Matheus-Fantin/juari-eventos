@@ -23,7 +23,7 @@ class StoreQuoteRequestRequest extends FormRequest
                 'after_or_equal:' . now()->addDays(3)->format('Y-m-d'),
                 'before:' . now()->addYears(5)->format('Y-m-d'),
             ],
-            'numero_convidados' => ['required', 'integer', 'min:20', 'max:200'],
+            'numero_convidados' => ['required', 'integer', 'min:40', 'max:200'],
             'event_type_id' => ['required', 'exists:event_types,id'],
             'mensagem' => ['nullable', 'string', 'max:2000'],
         ];
@@ -43,7 +43,7 @@ class StoreQuoteRequestRequest extends FormRequest
             'data_evento.before' => 'A data do evento deve ser em até 5 anos.',
             'numero_convidados.required' => 'Informe o número de convidados.',
             'numero_convidados.integer' => 'Informe um número de convidados válido.',
-            'numero_convidados.min' => 'Para grupos menores que 20 pessoas, fale diretamente com nossa equipe pelo WhatsApp.',
+            'numero_convidados.min' => 'Para grupos menores que 40 pessoas, fale diretamente com nossa equipe pelo WhatsApp.',
             'numero_convidados.max' => 'O espaço comporta até 200 convidados. Para grupos maiores, fale diretamente com nossa equipe.',
             'event_type_id.required' => 'Selecione o tipo de evento.',
             'event_type_id.exists' => 'O tipo de evento selecionado é inválido.',
